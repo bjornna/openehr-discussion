@@ -1,0 +1,7 @@
+= #openehr-discussions 
+
+== About 
+This is a repo to collect examples, topics and disucssion about the usage and developement of #openehr specifications. 
+
+Who is it for? +
+The repos is created and maintaned by Bjørn Næss (bna@dips.no) - to have a resources to share resources. 
