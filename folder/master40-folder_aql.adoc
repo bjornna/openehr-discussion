@@ -1,0 +1,261 @@
+= AQL and FOLDER 
+
+== Background on FOLDER AQL 
+This note contains some examples to define how AQL on Folder structures should work. The most important part is how the `CONTAINS` function should work in hierarchical folders. 
+
+== Example 1
+
+[source,json]
+----
+include::folder_ex1.json[]
+----
+
+
+[source,sql]
+----
+SELECT f, c 
+FROM folder f CONTAINS composition c  
+ORDER BY f/name/value 
+ -- limit 1;
+----
+
+.Resultset
+
+. f6, y1
+. f6, x1
+. f6, x2
+
+. f6.1, x1
+. f6.1, x2
+
+. f6.2, x1
+. f6.2, x2
+
+NOTE: Look how each top level folder is repeated and is sorted on folder.name 
+
+NOTE: If you add the `LIMIT` function it will work on the resultset. Which may or may not give unpredictable results depending on the use-case
+
+[source, sql]
+----
+ select f from folder f contains composition c where f/items/type = 'COMPOSITION';
+----
+
+.Resultset
+. f6
+. f6.2
+
+NOTE: In this example we use _type_ on OBJECT_REF to filter in only those FOLDERS who have a composition references. This reduces the resultset. 
+
+[source,sql]
+----
+select f from folder f contains folder f2 contains composition c;
+----
+
+.Resultset
+
+. f6
+. f6.1
+
+[source,sql]
+----
+select f from folder f contains folder f2 contains folder f3 contains composition c;
+----
+
+.Resultset
+
+. f6
+
+[source, sql]
+----
+select f3 from folder f contains folder f2 contains folder f3 contains composition c;
+----
+
+.Resultset
+
+. f6.2
+
+
+== Example 2
+
+
+[source,json]
+----
+include::folder_ex2.json[]
+----
+
+[source]
+----
+select f from folder f contains composition c;
+----
+
+.Resultset
+
+. f6.2
+
+[source,sql]
+----
+select f from folder f contains folder f2 contains composition c;
+----
+
+.Resultset
+
+<empty>
+
+[source,sql]
+----
+select f from folder f contains folder f2 contains folder f3 contains composition c;
+----
+
+.Resultset
+
+<empty>
+
+[source,sql]
+----
+select f3 from folder f contains folder f2 contains folder f3 contains composition c;
+----
+
+.Resultset
+
+<empty>
+
+
+== Example 3
+
+[source,json]
+----
+include::folder_ex3.json[]
+----
+
+[source,sql]
+----
+select f from folder f contains composition c;
+----
+
+.Resultset
+
+. f7.5
+
+[source,sql]
+----
+select f from folder f contains folder f2 contains composition c;
+----
+
+.Resultset
+<empty>
+
+
+[source, sql]
+----
+select f from folder f contains folder f2 contains folder f3 contains composition c;
+----
+
+.Resultset
+
+<empty>
+
+[source,sql]
+----
+select f3 from folder f contains folder f2 contains folder f3 contains composition c;
+----
+
+.Resultset
+
+<empty>
+
+
+== Exampple Section
+
+
+[source,json]
+----
+include::folder_ex4.json[]
+----
+
+[source,sql]
+----
+select s from section s contains observation o
+----
+
+.Resultset
+
+. s1
+. s2
+
+[source, sql]
+----
+select o from composition c contains observation o
+----
+
+.Resultset
+
+. o
+
+
+
+== Example Periode
+
+[source]
+----
+
+folder periode
+{
+    folder epsiode
+    {
+       folder clinical_statements
+       {
+           comp_refA
+       }
+
+       folder medical_coding
+       {
+           comp_refB
+       }
+    }
+}
+
+comp_A
+{
+    observation O
+}
+
+
+comp_B
+{
+    evaluation E
+}
+----
+
+
+[source,sql]
+----
+select c from folder f contains composition c where f/name/value = 'periode'
+----
+
+.Resultset
+
+. comp_A
+. comp_B
+
+[appendix]
+== Other things
+
+
+
+[source,sql]
+----
+select f from folder f where f/name/value = 'kliniske_opplysninger'
+
+select f from folder f contains composition c contains observation o where ...
+----
+
+[source,sql]
+----
+select c, s from ehr e contains folder f contains composition c contains section s
+----
+
+.Resultset
+
+. c1, s1
+. c1, s2
+. c2, s3

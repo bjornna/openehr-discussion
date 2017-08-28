@@ -1,0 +1,89 @@
+:folderdoc: folder_document
+= Use-cases for {folderdoc}
+
+== New {folderdoc}
+
+****
+[%hardbreaks]
+As a user I should be able to create a new {folderdoc} the same way as I create Compositions
+**** 
+
+
+== Content
+
+=== Editing 
+**** 
+As an author I should be able to add content into a {folderdoc}
+****
+
+
+****
+As an author I should be able to _remove_ content from a {folderdoc}
+****
+
+****
+As an author the editing of a {folderdoc} should be the same way as ordinary Compositions. 
+****
+
+=== Order
+
+****
+As an author I SHOULD be able to change the order of the items in a {folderdoc}
+****
+
+
+=== Search and lists 
+
+****
+As a user I SHOULD be able to look up {folderdoc} the same way as ordinaly Compositions
+****
+
+NOTE: I.e. some kind of listing with filters to locate the folders. 
+
+
+
+****
+As a user I SHOULD be able to do free-text search on content within a {folderdoc}
+****
+
+=== Level of details 
+
+****
+As a user I SHOLD be able to open a {folderdoc} and read a summary of the content. 
+**** 
+
+
+== Audit/approve/signing
+
+**** 
+As an author I MUST be able to sign a {folderdoc}
+****
+
+****
+As an author I SHOULD be able to sign the Compositions one at the time. 
+****
+
+
+== Print and publishing 
+
+**** 
+[%hardbreaks]
+As an user I SHOULD be able to print a {folderdoc}, 
+and the print should behave like ordinary print of Compositions 
+**** 
+
+**** 
+[%hardbreaks]
+As an user I SHOULD be able to send a {folderdoc} to receiver, 
+and the sending should be just like sending i.e. a discharge summary. 
+**** 
+
+
+== Administration 
+
+
+**** 
+[%hardbreaks]
+As an administrator i SHOULD be able to create a new {folderdoc} template, 
+and put it in an active state of the system. 
+****

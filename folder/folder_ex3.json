@@ -1,0 +1,21 @@
+[
+    {
+        "name":"f7", 
+        "items":["folder_ref:f7.2"]
+    },
+    {
+        "name":"f7.2", 
+        "items":["folder_ref:f7.3"]
+    },
+    {
+        "name":"f7.3", 
+        "items":["folder_ref:f7.4"]
+    },{
+        "name":"f7.4", 
+        "items":["folder_ref:f7.5"]
+    },
+    {
+        "name":"f7.5", 
+        "items":["comp_ref:x"]
+    }
+]

@@ -1,0 +1,21 @@
+{
+    "name": "f6",
+    "items": [
+        "comp_ref:y1"
+    ],
+    "folders": [
+        {
+            "name": "f6.1",
+            "items": [],
+            "folders": [
+                {
+                    "name": "f6.2",
+                    "items": [
+                        "comp_ref:x1",
+                        "comp_ref:x2"
+                    ]
+                }
+            ]
+        }
+    ]
+}

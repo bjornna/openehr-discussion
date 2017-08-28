@@ -1,231 +1,42 @@
 :imagesdir: images 
+:lang: eng
+:toc: left
+
+:toc-title: Contents
+:toclevels: 4
+:table-caption: Table
+:figure-caption: Figure
+
+:sectanchors:
+:sectnums:
+[[CONTENT]]
 
 = #openehr folder 
 
 == About 
 http://www.openehr.org/releases/RM/latest/docs/common/common.html#_folder_class[FOLDER] is part of the http://www.openehr.org/releases/RM/latest/docs/common/common.html#_directory_package[directory package]. 
 
-== Folder Template 
-To make Folder usable in a runtime environment we need a `FOLDER_TEMPLATE` . This is a meta-model which constraints (defines) the allowed content of a folder. It does also contain runtime information about how to create content in the `FOLDER`. 
+This document describes some background for the implementation that DIPS AS has done of openEHR FOLDER. There are two features added: 
 
-The UML class model for Folder Template is found below: 
-
-.FOLDER_TEMPLATE UML diagram 
-image::FolderDefinition.jpg[]
+. <<FOLDER_DOCUMENT>> 
+. <<FOLDER_TEMPLATE>> 
 
 
-== Examples 
-The following chapter lists some examples. 
+== Folder types
 
-[[MANIFEST_EXAMPLE]]
-=== Manifest 
+[[DIRECTORY]]
+=== DIRECTORY 
+A directory is a generic placeholder for content. It is expected to work just like a directory on the filesystem. 
 
-[source,json]
-----
-
-{
-    "id": "innkomstjournal",
-    "semver": "1.0.0",
-    "timestamp": "ISO-8601-1 DATETIME",
-    "schmaVersion": "1.0", // <1>
-    "author": "DIPS-BNA", // <2>
-    "defaultLanguage": "nb" // <3>
-}
-----
-<1> Defines the versjon of the Folder Template specification
-<2> The person who approved/saved this instance of the `FOLDER_TEMPLATE`
-<3> The default language used if no language is set during runtime. 
+[[FOLDER_DOCUMENT]]
+=== FOLDER_DOCUMENT
+This is a FOLDER which behaves almost like an Composition - but to be able to manage complex content possibly from severeal authors the content is collected and managed in an OpenEHR FOLDER. 
 
 
-[[FOLDER_TEMPLATE_EXAMPLE]]
-=== FolderTemplate 
 
-[source,json]
-----
-{
-    "id": "innkomstjournal",
-    "rmType": "FOLDER_DEFINITION",
-    "items": {
-        "min": 0,
-        "max": -1, // <1>
-        "definition": [
-            {
-                "id": "social_summary",
-                "createConceptId": "dips::ARENA-VAQM-SYSTEMCONFIG/edit_social_summary.v1.0.0",
-                "selectConceptId": "dips::ARENA-VAQM-SYSTEMCONFIG/select_social_summary.v1.0.0"
-            }
-        ]
-    },
-    "folders": {
-        "min": 0,
-        "max": 1,
-        "definitions": [
-            {
-                "id": "tidl_sykdommer",
-                "items": {
-                    "min": 0,
-                    "max": -1,
-                    "definition": [
-                        {
-                            "id": "problem_list",
-                            "createConceptId": "dips::ARENA-VAQM-SYSTEMCONFIG/edit_problem_list.v1.0.0",
-                            "selectConceptId": "dips::ARENA-VAQM-SYSTEMCONFIG/select_problem_list.v1.0.0"
-                        },
-                        {
-                            "id": "other_problem_items",
-                            "createConceptId": "dips::ARENA-VAQM-SYSTEMCONFIG/edit_other_problems.v1.0.0",
-                            "selectConceptId": "dips::ARENA-VAQM-SYSTEMCONFIG/select_other_problems.v1.0.0"
-                        }
-                    ]
-                },
-                "folders": {
-                    "min": 0,
-                    "max": 0,
-                    "definitions": []
-                }
-            }
-        ]
-    },
-    "terminologies": [
-        {
-            "nb": [
-                {
-                    "innkomstjournal": {
-                        "text": "Innkomstjournal"
-                    }
-                },
-                {
-                    "social_summary": {
-                        "text": "Familie og Sosialt",
-                        "description": "Her er en beskrivelse av familie og sosialt"
-                    }
-                },
-                {
-                    "tidl_sykdommer":{
-                        "text":"Tidligere sykdommer",
-                        "description": "Persistent oppføring av tidligere sykdommer"
-                    }
-                },
-                {
-                    "problem_list":{
-                        "text": "Problemliste",
-                        "description": "Her kan man skrive en valgfri ledetekst for dette noden"
-                    }
 
-                },
-                {
-                    "other_problem_items":{
-                        "text": "Andre problemer",
-                        "description": "Andre oppføringer knyttet til tidligere sykdommer"
-                    }
-                }
-            ]
-        },
-        {
-            "en": [
-                {
-                    "innkomstjournal": {
-                        "text": "Admission note",
-                        "description": "Some description about the admission note"
-                    }
-                },
-                {
-                    "social_summary": {
-                        "text": "Admission note",
-                        "description": "Some description about the admission note"
-                    }
-                }
-            ]
-        }
-    ]
+include::master20-use_cases.adoc[leveloffset=+1]
 
-}
-----
-<1> `-1` means unbounded 
+include::master30-folder_template.adoc[leveloffset=+1]
 
-== Folder instances example 
-
-=== Admission Note
-
-[source,json]
-----
-{
-    "name": {
-        "value": "Admission note"
-    },
-    "archetype_node_id": "openEHR-EHR-FOLDER.admission_folder.v1",
-    "uid": {
-        "_type": "OBJECT_VERSION_ID",
-        "value": "ac24e841-c23c-4f9b-81ce-9e0c91eae5e5::91215053-854b-45b8-bb2a-3b0d255858d1::1"
-    },
-    "archetype_details": {
-        "archetype_id": {
-            "value": "openEHR-EHR-FOLDER.admission_folder.v1"
-        },
-        "template_id": {
-            "value": "FolderDemo"
-        },
-        "rm_version": "1.0.3"
-    },
-    "items": [],
-    "folders": [
-        {
-            "name": {
-                "value": "Previous diseases"
-            },
-            "archetype_node_id": "openEHR-EHR-FOLDER.previous_diseases.v1",
-            "items": [
-                "objRef1",
-                "objRef2",
-                "objRef3"
-            ],
-            "folders": []//empty
-        },
-        {
-            "name": {
-                "value": "Social summary"
-            },
-            "archetype_node_id": "openEHR-EHR-FOLDER.social_summary.v1",
-            "items": [
-                "objRef4",
-                "objRef5"
-            ],
-            "folders": []//empty
-        },
-        {
-            "name": {
-                "value": "Observations"
-            },
-            "archetype_node_id": "openEHR-EHR-FOLDER.observations.v1",
-            "items": [],//empty
-            "folders": [
-                {
-                    "name": {
-                        "value": "Vital signs"
-                    },
-                    "archetype_node_id": "openEHR-EHR-FOLDER.vital_signs.v1",
-                    "items": [
-                        "objRef_Temp",
-                        "objRef_Weight",
-                        "objRef_Spo2",
-                        "objRef_Pulse"
-                    ],
-                    "folders": []//empty
-                },
-                {
-                    "name": {
-                        "value": "Physical examinations"
-                    },
-                    "archetype_node_id": "openEHR-EHR-FOLDER.exam.v1",
-                    "items": [
-                        "objRefEx_Head",
-                        "objRefEx_Columna",
-                        "objRefEx_LowerLimb"
-                    ],
-                    "folders": []//empty
-                }
-            ]
-        }
-    ]
-}
-----
+include::master40-folder_aql.adoc[leveloffset=+1]

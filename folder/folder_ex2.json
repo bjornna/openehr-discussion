@@ -1,0 +1,19 @@
+[
+    {
+        "name": "f6",
+        "folders": [
+            {
+                "name": "f6.1",
+                "items": [
+                    "folder_ref:f6.2"
+                ]
+            }
+        ]
+    },
+    {
+        "name": "f6.2",
+        "items": [
+            "comp_ref:x1"
+        ]
+    }
+]

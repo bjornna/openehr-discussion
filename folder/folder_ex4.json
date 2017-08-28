@@ -1,0 +1,11 @@
+composition c
+{
+    section s1
+     {
+         section s2
+         {
+             observation o
+             
+        }
+    }
+}
