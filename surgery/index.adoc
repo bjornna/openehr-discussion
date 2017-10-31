@@ -11,27 +11,72 @@ After surgery the surgeon document what was done in a surgery protocol. A mock u
 
 image::SurgeryProtocol_01.png[]
 
+In this note I will only cover a few topics: 
+
+. Surgery start and end 
+. Paricipations 
+. Procedure codes
+
+
+== Surgery start and end 
 
 To document what was performed we use the careflow step `Procedure completed` with current state `completed`. The description for this careflow step is: The procedure has been performed and all associated clinical activities completed. 
 
 Then we do a trick do document start and end of the procedure: 
 
-[cols="1,1,3,5", options="header"]
+[cols="1,1,3,8", options="header"]
 |===
 |Name | Context name | Path | Description 
 | Scheduled date/time
 | Procedure start
-|/content[openEHR-EHR-ACTION.procedure.v1]/description[at0001]/items[at0066]
+|/description[at0001]/items[at0066]
 |The  intention for this step is _The date and/or time on which the procedure is intended to be performed._ But since the current state is `completed` we will intepret this as the actual start time when the procedure was started. 
 |Final end date/time 
 |Procedure end
-|/content[openEHR-EHR-ACTION.procedure.v1]/description[at0001]/items[at0060]
+|/description[at0001]/items[at0060]
 |The intention for this step is _The date and/or time when the entire procedure, or the last component of a multicomponent procedure, was finished._. And for this action instance with state `completed` we intepret this as the actual time when the procedure ended. 
 |Time 
 |Report time
-|/content[openEHR-EHR-ACTION.procedure.v1]/time 
+|/time 
 |Since the careflow step is `Procedure completed` and current state is `completed` we will set this RM attribute to the datetime when the report where created 
 |===
 
 
 == Multiple procedures 
+Many surgeries will have several procedures performed. Then the composition will containt multiple instances of ACTION.procedure. The procedure start and end for each procedure will follow the pattern defined above. 
+
+To document the total surgery time we use the COMPOSITION.context.start_time/end_time. These attributes are defined in http://www.openehr.org/releases/RM/latest/docs/ehr/ehr.html#_event_context_class[EVENT_CONTEXT class] like this: 
+
+[cols="1,1,5", options="header"]
+|===
+|Attributes|Signature | Meaning 
+|1..1|*start_time*: `DV_DATE_TIME` |	
+Start time of the clinical session or other kind of event during which a provider performs a service of any kind for the patient.
+|0..1|*end_time*: `DV_DATE_TIME` | 	
+Optional end time of the clinical session.
+|===
+
+For all surgeries documented in DIPS Arena the total surgery time will always be documented using these attributes from the EVENT_CONTEXT. And if the surgery only have one ACTION.procedure then we will have the following. 
+
+----
+COMPOSITION.context.start_time === ACTION/description[at0001]/items[at0066] (Scheduled date/time == Procedure start time)
+AND 
+COMPOSITION.context.end_time === ACTION/description[at0001]/items[at0060] (Final end date/time)
+----
+
+== Participations 
+Participations will be documented using the RM attributes `other_participants` which is defined for all ENTRY archetypes. 
+
+The documentation is well defined here: http://www.openehr.org/releases/RM/latest/docs/common/common.html#_participation_class[]
+
+== Procedure codes 
+In Norway we use NCSP codes for public reporting of procedure codes. These codes are documented here: https://ehelse.no/standarder-kodeverk-og-referansekatalog/helsefaglige-kodeverk/prosedyrekodeverkene-kodeverk-for-medisinske-kirurgiske-og-radiologiske-prosedyrer-ncmp-ncsp-og-ncrp#prosedyrekodeverkene-2018[] 
+
+TIP: I am really sorry - there are no translations of these..... 
+
+These procedure codes are administrative and used for financial settlement. At the same time we have no other detailed terminologies to use in Norway. Except that DIPS EMR provides a configurable terminology called _SURGERY_TYPES_ (VI-OPERASJONSTYPER). These codes are used when requesting surgery and they define the clinical procedyre that was actually performed. This is why we have chosen to use this local terminology as the _procedure name_ definition. And we will use a local CLUSTER archetype to capture the detailed NCSP (administrative) codes. 
+
+Below is a screenshot of the template using a) the terminology _SURGERY_TYPES_ (VI-OPERASJONSTYPER) as ACTION.procedure_name and a repeating cluster _procedure details_. 
+
+image::surgery_report_template.png[]
+
