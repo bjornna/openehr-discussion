@@ -1,6 +1,23 @@
 :imagesdir: images
 = Surgery and openEHR archetypes 
 
+== Amendmend record 
+
+[options="header",frame="topbot",cols="4,3,3"]
+|===
+|Issue|Raiser|Completed
+3+^h|*R E L E A S E{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}1.0.0-RC1*
+
+|Added FAQ
+|Bjørn Næss
+|01.11.2017
+
+|Initial writing 
+|Bjørn Næss
+|31.10.2017
+
+|=== 
+
 == Background
 Surgery is an important activity in hospitals. It requires good planning, quality in execution and the right post-operative documentation. 
 
@@ -79,4 +96,20 @@ These procedure codes are administrative and used for financial settlement. At t
 Below is a screenshot of the template using a) the terminology _SURGERY_TYPES_ (VI-OPERASJONSTYPER) as ACTION.procedure_name and a repeating cluster _procedure details_. 
 
 image::surgery_report_template.png[]
+
+
+== FAQ
+
+[qanda]
+Why not use careflow step for start and stop? :: 
+In some situations the user will enter one ACTION for start and another for stop. But when I look closer into the careflow step it is not explicit what is the real start and stop. The applications must have some logic to extract the correct timestamps. The application must also consider suspension periodes for some cases. This is why I want the design to be simple and explicit. There MUST be no need for this kind of reasoning for secondary use of the data. Secondary use is all kind of artificial intelligence, descision support, public reporting, financial settlement, etc.  +
+Of course - the application MUST be clever to provide reasonable defaults from earlier data to the end-user. But - that's another story. 
+
+Why are you using `Scheduled date/time` as the actual procecure start? :: 
+The description for this element says: _The date and/or time on which the procedure is intended to be performed.
+Comment: Only for use in association with the 'Procedure scheduled' pathway step._ +
+Based on the description for the element you can see that I am using it wrong. Some suggest that we should use some CLUSTER, but I don't like the idea. The procedure archetype MUST be self-contained to be able such basic data as _start_ and _stop_. Since there are noe other elements in the approved archetype I chose to redefine the meaning of this element for this specific careflow step. (Look in the table above). + 
+
+Why do you calculate the `Total duration` for the procedure? :: 
+I have chosen to always calculate the total duration. This decision is as for _start_ and _stop_ to make secondary use explicit and simpler. With one field defining the duration it is far more easy to aggregate and exctract duration for different procedures. 
 
